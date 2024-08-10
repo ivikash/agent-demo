@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Start Server (Development)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "src.voice_assistant.app:app",
+                "--reload",
+                "--host", "0.0.0.0",
+                "--port", "6226",
+                "--ssl-keyfile=./certs/cert-key.pem",
+                "--ssl-certfile=./certs/cert.pem"
+            ],
+        },
+        {
+            "name": "Unit Tests",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+        },
+        {
+            "name": "Unit Tests - Watch",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest_watch",
+        },
+        {
+            "name": "Documentation Website",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pydoc",
+            "args": [
+                "-p",
+                "8001",
+            ],
+        }
+    ]
+}

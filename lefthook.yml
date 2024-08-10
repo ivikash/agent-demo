@@ -1,8 +1,17 @@
 pre-commit:
   parallel: true
   commands:
-    lint-python:
-      run: poe lint_fix && poe lint_types && poe lint_docstring && poe lint_format
+    lint-python-fix:
+      run: poe lint_fix
+
+    lint-python-types:
+      run: poe lint_types
+
+    lint-python-docstring:
+      run: poe lint_docstring
+
+    lint-python-format:
+      run: poe lint_format
 
     lint-security:
       run: poe lint_security_analysis

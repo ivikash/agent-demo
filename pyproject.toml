@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "baazigar"
+name = "voice_assistant"
 version = "0.1.0"
 description = "A multi-modal agent platform."
 authors = ["Vikash Agrawal <vikashagrawal1990@gmail.com>"]
 readme = "README.md"
-packages = [{include = "baazigar", from = "src"}]
+packages = [{include = "voice_assistant", from = "src"}]
 
 [build-system]
 requires = ["poetry-core"]
@@ -12,9 +12,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-flask = "^3.0.3"
+fastapi = "^0.112.0"
+httpx = "^0.27.0"
 loguru = "^0.7.2"
 python-dotenv = "^1.0.1"
+uvicorn = "^0.30.5"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.9"
@@ -30,13 +32,15 @@ ruff = "^0.5.6"
 
 [tool.poe.tasks]
 lint = "poetry run ruff check"
-lint_docstring = "poetry run interrogate -v"
+lint_docstring = "poetry run interrogate -vv"
 lint_fix = "poetry run ruff check --fix"
 lint_format = "poetry run ruff format"
 lint_security_analysis = "poetry run bandit -r src"
 lint_types = "poetry run mypy ."
 pre_commit = "lefthook run pre-commit -f"
+start = "poetry run uvicorn src.voice_assistant.app:app --host 0.0.0.0 --port 6226 --ssl-keyfile=./certs/cert-key.pem --ssl-certfile=./certs/cert.pem"
 test = "poetry run pytest tests"
+test_watch = "poetry run ptw"
 
 
 [tool.interrogate]
@@ -54,9 +58,7 @@ ignore-semiprivate=true
 files = ["src", "tests"]
 
 [tool.ruff]
-extend-exclude = [
-    "__pycache__",
-]
+extend-exclude = ["__pycache__"]
 line-length = 90
 src = ["src", "tests"]
 target-version = "py311"
@@ -86,10 +88,12 @@ extend-select = [
     "SIM",         # flake8-simplify
     "T20",         # flake8-print
     "UP",          # pyupgrade
-    "YTT",         # flake8-2020
-]
+    "YTT",]         # flake8-2020
 ignore = [
   "C408", "C416",  # Unnecessary `dict` call (rewrite as a literal)
   "PLR",           # Design related pylint codes
-  "RUF012",        # Mutable class attributes should be annotated with `typing.ClassVar`
-]
+  "RUF012"]        # Mutable class attributes should be annotated with `typing.ClassVar`
+
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
